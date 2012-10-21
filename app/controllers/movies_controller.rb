@@ -7,6 +7,24 @@ class MoviesController < ApplicationController
   end
 
   def index
+	redirect =false
+
+	if params[:sort_by].nil? and !(session[:sort_by].nil?)
+	  params[:sort_by] = session[:sort_by]
+	  redirect = true
+	else
+	  session[:sort_by] = params[:sort_by] 
+	end
+
+	if (params[:ratings].nil? and params[:commit].nil?) and !(session[:ratings].nil?)
+	  params[:ratings] = session[:ratings]
+	  redirect = true
+	else
+	  session[:ratings] = params[:ratings]
+	end
+
+	redirect_to movies_path params if redirect 
+  
 	@all_ratings = Movie.all_ratings
     @sort_by = params[:sort_by]
 	@selected_ratings = params[:ratings]
